@@ -1,13 +1,13 @@
 import React from "react";
 import "./App.css";
-import MakeList from "./components/People";
+import People from "./components/People";
 import MakeShip from "./components/Ships";
 import MakePlanet from "./components/Planets";
 function App() {
   return (
     <div className="App">
       <section id="people" class="lists">
-        <MakeList />
+        <People />
       </section>
       <section id="ship" class="lists">
         <MakeShip />
