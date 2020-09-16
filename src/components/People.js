@@ -1,56 +1,44 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { fetchRequest } from "../shared/service.js";
 
 const Person = (props) => {
   const { name, height } = { ...props };
   return (
-    <p>
-      {name} {height}cm <hr />
-    </p>
+    <div>
+      <p>
+        {name} {height}cm
+      </p>
+      <hr />
+    </div>
   );
 };
 
 function People() {
   //   const [name, setName] = React.useState(null);
   //   const [height, setHeight] = React.useState(null);
-  const [array1, setArray1] = React.useState([]);
-  const [next, setNext] = React.useState(null);
-  const [previous, setPrevious] = React.useState(null);
+  const [array1, setArray1] = useState([]);
+  const [next, setNext] = useState(null);
+  const [previous, setPrevious] = useState(null);
 
-  const clickHandlerNext = (event, nextURL) => {
-    console.log("clicking");
-    fetchRequest(nextURL, (data) => {
-      setArray1(data.results);
-      setNext(data.next);
-      setPrevious(data.previous);
-    });
-  };
-
-  const clickHandlerPrev = (event, nextURL) => {
-    fetchRequest(nextURL, (data) => {
-      setArray1(data.results);
-      setNext(data.next);
-      setPrevious(data.previous);
-    });
+  const setData = (data) => {
+    setArray1(data.results);
+    setNext(data.next);
+    setPrevious(data.previous);
   };
 
   useEffect(() => {
-    fetchRequest("https://swapi.dev/api/people/", (data) => {
-      setArray1(data.results);
-      setNext(data.next);
-      setPrevious(data.previous);
-    });
+    fetchRequest("https://swapi.dev/api/people/", setData);
   }, []);
 
   return (
     <div>
-      {array1.map((list) => {
-        return <Person name={list.name} height={list.height} />;
+      {array1.map((list, index) => {
+        return <Person key={index} name={list.name} height={list.height} />;
       })}
       {next ? (
         <button
           onClick={(event) => {
-            clickHandlerNext(event, next);
+            fetchRequest(next, setData);
           }}
         >
           Next
@@ -61,7 +49,7 @@ function People() {
       {previous ? (
         <button
           onClick={(event) => {
-            clickHandlerPrev(event, previous);
+            fetchRequest(previous, setData);
           }}
         >
           Prev

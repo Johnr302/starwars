@@ -4,52 +4,37 @@ import { fetchRequest } from "../shared/service.js";
 const Planet = (props) => {
   const { name } = { ...props };
   return (
-    <p>
-      Planet: {name}
+    <div>
+      <p>Planet: {name}</p>
       <hr />
-    </p>
+    </div>
   );
 };
 
-function MakePlanet() {
+function Planets() {
   const [planetArray, setPlanetArray] = React.useState([]);
   const [next, setNext] = React.useState(null);
   const [previous, setPrevious] = React.useState(null);
 
-  const clickHandlerNext = (event, nextURL) => {
-    console.log("clicking");
-    fetchRequest(nextURL, (data) => {
-      setPlanetArray(data.results);
-      setNext(data.next);
-      setPrevious(data.previous);
-    });
-  };
-
-  const clickHandlerPrev = (event, nextURL) => {
-    fetchRequest(nextURL, (data) => {
-      setPlanetArray(data.results);
-      setNext(data.next);
-      setPrevious(data.previous);
-    });
+  const setData = (data) => {
+    setPlanetArray(data.results);
+    setNext(data.next);
+    setPrevious(data.previous);
   };
 
   useEffect(() => {
-    fetchRequest("https://swapi.dev/api/starships/", (data) => {
-      setPlanetArray(data.results);
-      setNext(data.next);
-      setPrevious(data.previous);
-    });
+    fetchRequest("https://swapi.dev/api/starships/", setData);
   }, []);
 
   return (
     <div>
-      {planetArray.map((list) => {
-        return <Planet name={list.name} />;
+      {planetArray.map((list, index) => {
+        return <Planet key={index} name={list.name} />;
       })}
       {next ? (
         <button
           onClick={(event) => {
-            clickHandlerNext(event, next);
+            fetchRequest(next, setData);
           }}
         >
           Next
@@ -60,7 +45,7 @@ function MakePlanet() {
       {previous ? (
         <button
           onClick={(event) => {
-            clickHandlerPrev(event, previous);
+            fetchRequest(previous, setData);
           }}
         >
           Prev
@@ -72,4 +57,4 @@ function MakePlanet() {
   );
 }
 
-export default MakePlanet;
+export default Planets;

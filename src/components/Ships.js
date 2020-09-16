@@ -4,52 +4,39 @@ import { fetchRequest } from "../shared/service.js";
 const Ship = (props) => {
   const { name, model } = { ...props };
   return (
-    <p>
-      Ship: {name} Model: {model}
+    <div>
+      <p>
+        Ship: {name} Model: {model}
+      </p>
       <hr />
-    </p>
+    </div>
   );
 };
 
-function MakeShip() {
+function Ships() {
   const [shipArray, setShipArray] = React.useState([]);
   const [next, setNext] = React.useState(null);
   const [previous, setPrevious] = React.useState(null);
 
-  const clickHandlerNext = (event, nextURL) => {
-    console.log("clicking");
-    fetchRequest(nextURL, (data) => {
-      setShipArray(data.results);
-      setNext(data.next);
-      setPrevious(data.previous);
-    });
-  };
-
-  const clickHandlerPrev = (event, nextURL) => {
-    fetchRequest(nextURL, (data) => {
-      setShipArray(data.results);
-      setNext(data.next);
-      setPrevious(data.previous);
-    });
+  const setData = (data) => {
+    setShipArray(data.results);
+    setNext(data.next);
+    setPrevious(data.previous);
   };
 
   useEffect(() => {
-    fetchRequest("https://swapi.dev/api/starships/", (data) => {
-      setShipArray(data.results);
-      setNext(data.next);
-      setPrevious(data.previous);
-    });
+    fetchRequest("https://swapi.dev/api/starships/", setData);
   }, []);
 
   return (
     <div>
-      {shipArray.map((list) => {
-        return <Ship name={list.name} model={list.model} />;
+      {shipArray.map((list, index) => {
+        return <Ship key={index} name={list.name} model={list.model} />;
       })}
       {next ? (
         <button
           onClick={(event) => {
-            clickHandlerNext(event, next);
+            fetchRequest(next, setData);
           }}
         >
           Next
@@ -60,7 +47,7 @@ function MakeShip() {
       {previous ? (
         <button
           onClick={(event) => {
-            clickHandlerPrev(event, previous);
+            fetchRequest(previous, setData);
           }}
         >
           Prev
@@ -72,4 +59,4 @@ function MakeShip() {
   );
 }
 
-export default MakeShip;
+export default Ships;
