@@ -1,29 +1,60 @@
 import React, { useEffect } from "react";
+import { fetchRequest } from "../shared/service.js";
 
 const Planet = (props) => {
   const { name } = { ...props };
   return (
-    <p>
-      Planet: {name}
+    <div>
+      <p>Planet: {name}</p>
       <hr />
-    </p>
+    </div>
   );
 };
 
-function MakePlanet() {
+function Planets() {
   const [planetArray, setPlanetArray] = React.useState([]);
+  const [next, setNext] = React.useState(null);
+  const [previous, setPrevious] = React.useState(null);
+
+  const setData = (data) => {
+    setPlanetArray(data.results);
+    setNext(data.next);
+    setPrevious(data.previous);
+  };
 
   useEffect(() => {
-    fetch("https://swapi.dev/api/starships/")
-      .then((response) => response.json())
-      .then((data) => {
-        setPlanetArray(data.results);
-      });
+    fetchRequest("https://swapi.dev/api/starships/", setData);
   }, []);
 
-  return planetArray.map((list) => {
-    return <Planet name={list.name} />;
-  });
+  return (
+    <div>
+      {planetArray.map((list, index) => {
+        return <Planet key={index} name={list.name} />;
+      })}
+      {next ? (
+        <button
+          onClick={(event) => {
+            fetchRequest(next, setData);
+          }}
+        >
+          Next
+        </button>
+      ) : (
+        ""
+      )}
+      {previous ? (
+        <button
+          onClick={(event) => {
+            fetchRequest(previous, setData);
+          }}
+        >
+          Prev
+        </button>
+      ) : (
+        ""
+      )}
+    </div>
+  );
 }
 
-export default MakePlanet;
+export default Planets;

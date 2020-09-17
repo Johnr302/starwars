@@ -1,29 +1,62 @@
 import React, { useEffect } from "react";
+import { fetchRequest } from "../shared/service.js";
 
 const Ship = (props) => {
   const { name, model } = { ...props };
   return (
-    <p>
-      Ship: {name} Model: {model}
+    <div>
+      <p>
+        Ship: {name} Model: {model}
+      </p>
       <hr />
-    </p>
+    </div>
   );
 };
 
-function MakeShip() {
+function Ships() {
   const [shipArray, setShipArray] = React.useState([]);
+  const [next, setNext] = React.useState(null);
+  const [previous, setPrevious] = React.useState(null);
+
+  const setData = (data) => {
+    setShipArray(data.results);
+    setNext(data.next);
+    setPrevious(data.previous);
+  };
 
   useEffect(() => {
-    fetch("https://swapi.dev/api/starships/")
-      .then((response) => response.json())
-      .then((data) => {
-        setShipArray(data.results);
-      });
+    fetchRequest("https://swapi.dev/api/starships/", setData);
   }, []);
 
-  return shipArray.map((list) => {
-    return <Ship name={list.name} model={list.model} />;
-  });
+  return (
+    <div>
+      {shipArray.map((list, index) => {
+        return <Ship key={index} name={list.name} model={list.model} />;
+      })}
+      {next ? (
+        <button
+          onClick={(event) => {
+            fetchRequest(next, setData);
+          }}
+        >
+          Next
+        </button>
+      ) : (
+        ""
+      )}
+      {previous ? (
+        <button
+          onClick={(event) => {
+            fetchRequest(previous, setData);
+          }}
+        >
+          Prev
+        </button>
+      ) : (
+        ""
+      )}
+    </div>
+  );
 }
 
-export default MakeShip;
+export default Ships;

@@ -1,19 +1,19 @@
 import React from "react";
 import "./App.css";
-import MakeList from "./components/People";
-import MakeShip from "./components/Ships";
-import MakePlanet from "./components/Planets";
+import People from "./components/People";
+import Ships from "./components/Ships";
+import Planets from "./components/Planets";
 function App() {
   return (
     <div className="App">
-      <section id="people" class="lists">
-        <MakeList />
+      <section id="people" className="lists">
+        <People />
       </section>
-      <section id="ship" class="lists">
-        <MakeShip />
+      <section id="ship" className="lists">
+        <Ships />
       </section>
-      <section id="ship" class="lists">
-        <MakePlanet />
+      <section id="ship" className="lists">
+        <Planets />
       </section>
     </div>
   );

@@ -1,30 +1,64 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { fetchRequest } from "../shared/service.js";
 
-const List = (props) => {
+const Person = (props) => {
   const { name, height } = { ...props };
   return (
-    <p>
-      {name} {height}cm <hr />
-    </p>
+    <div>
+      <p>
+        {name} {height}cm
+      </p>
+      <hr />
+    </div>
   );
 };
 
-function MakeList() {
+function People() {
   //   const [name, setName] = React.useState(null);
   //   const [height, setHeight] = React.useState(null);
-  const [array1, setArray1] = React.useState([]);
+  const [array1, setArray1] = useState([]);
+  const [next, setNext] = useState(null);
+  const [previous, setPrevious] = useState(null);
+
+  const setData = (data) => {
+    setArray1(data.results);
+    setNext(data.next);
+    setPrevious(data.previous);
+  };
 
   useEffect(() => {
-    fetch("https://swapi.dev/api/people/")
-      .then((response) => response.json())
-      .then((data) => {
-        setArray1(data.results);
-      });
+    fetchRequest("https://swapi.dev/api/people/", setData);
   }, []);
 
-  return array1.map((list) => {
-    return <List name={list.name} height={list.height} />;
-  });
+  return (
+    <div>
+      {array1.map((list, index) => {
+        return <Person key={index} name={list.name} height={list.height} />;
+      })}
+      {next ? (
+        <button
+          onClick={(event) => {
+            fetchRequest(next, setData);
+          }}
+        >
+          Next
+        </button>
+      ) : (
+        ""
+      )}
+      {previous ? (
+        <button
+          onClick={(event) => {
+            fetchRequest(previous, setData);
+          }}
+        >
+          Prev
+        </button>
+      ) : (
+        ""
+      )}
+    </div>
+  );
 }
 
-export default MakeList;
+export default People;
