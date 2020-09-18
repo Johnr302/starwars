@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { fetchRequest } from "../shared/service.js";
+import { Button } from "reactstrap";
 
 const Planet = (props) => {
   const { name } = { ...props };
@@ -32,24 +33,28 @@ function Planets() {
         return <Planet key={index} name={list.name} />;
       })}
       {next ? (
-        <button
+        <Button
+          outline
+          color="danger"
           onClick={(event) => {
             fetchRequest(next, setData);
           }}
         >
           Next
-        </button>
+        </Button>
       ) : (
         ""
       )}
       {previous ? (
-        <button
+        <Button
+          outline
+          color="danger"
           onClick={(event) => {
             fetchRequest(previous, setData);
           }}
         >
           Prev
-        </button>
+        </Button>
       ) : (
         ""
       )}

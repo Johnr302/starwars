@@ -1,5 +1,6 @@
 import React from "react";
 import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 import People from "./components/People";
 import Ships from "./components/Ships";
 import Planets from "./components/Planets";
