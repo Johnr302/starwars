@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { fetchRequest } from "../shared/service.js";
+import { Button } from "reactstrap";
 
 const Person = (props) => {
   const { name, height } = { ...props };
@@ -36,24 +37,28 @@ function People() {
         return <Person key={index} name={list.name} height={list.height} />;
       })}
       {next ? (
-        <button
+        <Button
+          outline
+          color="success"
           onClick={(event) => {
             fetchRequest(next, setData);
           }}
         >
           Next
-        </button>
+        </Button>
       ) : (
         ""
       )}
       {previous ? (
-        <button
+        <Button
+          outline
+          color="success"
           onClick={(event) => {
             fetchRequest(previous, setData);
           }}
         >
           Prev
-        </button>
+        </Button>
       ) : (
         ""
       )}
