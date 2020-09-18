@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Col, Row, Container } from "reactstrap";
+import { Col, Row } from "reactstrap";
 import People from "./components/People";
 import Ships from "./components/Ships";
 import Planets from "./components/Planets";
